@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ansi (1.5.0)
+    bcrypt (3.1.18)
     builder (3.2.4)
     erubis (2.7.0)
     eventmachine (1.2.7)
@@ -14,6 +15,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    pg (1.4.3)
     rack (1.6.13)
     rack-protection (1.5.5)
       rack
@@ -28,9 +30,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt
   erubis
   mini
   minitest-reporters
+  pg
   rack
   sinatra
 

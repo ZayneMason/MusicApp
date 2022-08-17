@@ -11,6 +11,10 @@ class DatabasePersistance
     @logger = logger
   end
 
+  def disconnect
+    @db.close
+  end
+
   def valid_user?(username, password)
     sql = "SELECT username FROM users WHERE username = $1 AND pass = crypt($2, pass)"
     result = query(sql, username, password)
@@ -28,8 +32,20 @@ class DatabasePersistance
     query(sql, username, password)
   end
 
-  def disconnect
-    @db.close
+  def get_posts_for_list(user)
+    sql = <<~SQL
+    SELECT posts.user_id AS username FROM 
+    SQL
+    result = query(sql, [user])
+
+    result.map do |tuple|
+      {
+        username: tuple["username"],
+        time_of_post: tuple["time_of_post"],
+        caption: tuple["caption"],
+        song_link: tuple["song_link"]
+      }
+    end
   end
 
   private

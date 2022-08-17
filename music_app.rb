@@ -38,6 +38,7 @@ post "/users/login" do
   end
 end
 
+# CREATE NEW USER
 get "/users/create" do
   erb :signup, layout: :layout
 end
@@ -62,10 +63,10 @@ end
 
 get "/" do
   redirect "/users/login" unless session[:username]
+  @posts = @storage.get_posts_for_list(session[:username])
   erb :post_list, layout: :layout
 end
 
-# CREATE A NEW USER
 
 # DISPLAY A LIST OF POSTS FROM USERS USER FOLLOWS
 # DISPLAY A LIST OF POSTS FROM USERS THAT THE USER DOES NOT FOLLOW

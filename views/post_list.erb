@@ -1,1 +1,12 @@
-<h1>WORKING!</h1>
+<a class="post_link" href="/users/posts/new">Create a new post!</a>
+<h1>Your feed</h1>
+<ol>
+  <% @posts.each do |post| %>
+    <li>
+      <h3><%= post[:username] %></h3>
+      <p><%= post[:song_link] %><p>
+      <p><%= post[:caption] %><p>
+      <p><%= post[:time_of_post] %><p>
+    </li>
+  <% end %>
+</ol>

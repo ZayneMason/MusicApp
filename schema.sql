@@ -17,3 +17,9 @@ CREATE TABLE comments(
   post_id integer REFERENCES posts(id),
   user_id integer REFERENCES users(id)
 );
+
+CREATE TABLE likes(
+  user_id integer REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  post_id integer REFERENCES posts(id) ON DELETE CASCADE NOT NULL,
+  UNIQUE(user_id, post_id)
+);

@@ -1,0 +1,16 @@
+<form method="post" action="/users/create">
+  <div>
+    <label for="username"> Username:
+      <input name="username" id="username" value="<%= params[:username] %>">
+    </label>
+  </div>
+  <div>
+    <label for="password"> Password:
+    <input name="password" id="password" value="<%= params[:new_password] %>">
+  </div>
+  <div>
+    <label for="confirm_password"> Confirm Password:
+    <input for="confirm_password" id="confirm_password" value="<%= params[:confirm_password] %>">
+  </div>
+  <button type="submit">Create account</button>
+</form>

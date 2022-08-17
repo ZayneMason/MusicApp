@@ -1,6 +1,8 @@
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE users(
   id serial PRIMARY KEY,
-  email varchar(30) UNIQUE NOT NULL,
+  username varchar(18) UNIQUE NOT NULL,
   pass text NOT NULL
 );
 

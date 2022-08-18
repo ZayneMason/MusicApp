@@ -23,31 +23,43 @@ class DatabasePersistance
 
   def valid_username?(username)
     sql = "SELECT username FROM users WHERE username = $1"
-    result = query(sql, [username])
+    result = @db.exec_params(sql, [username])
     result.values.empty?
   end
 
   def create_user(username, password)
-    sql = "INSERT INTO users(username, pass) VALUES ($1, crypt($2, gen_salt('bf')))"
+    sql = "INSERT INTO users(username, pass) VALUES ($1, crypt($2, gen_salt('bf'))"
     query(sql, username, password)
+    sql = "INSERT INTO follows(username, follower) VALUES ($1, $2)"
+    query(sql, username, username)
   end
 
-  def get_posts_for_list(user)
+  def get_posts_for_list(username)
     sql = <<~SQL
-    SELECT posts.user_id AS username FROM 
+    SELECT posts.username, posts.time_of, posts.caption, posts.song_link FROM posts
+    INNER JOIN follows ON posts.username = follows.username
+    WHERE follows.follower = $1
+    ORDER BY posts.time_of DESC
     SQL
-    result = query(sql, [user])
+    result = @db.exec_params(sql, [username])
 
     result.map do |tuple|
       {
         username: tuple["username"],
-        time_of_post: tuple["time_of_post"],
+        time_of_post: tuple["time_of"],
         caption: tuple["caption"],
         song_link: tuple["song_link"]
       }
     end
   end
 
+  def create_post(song_link, caption, username)
+    sql = <<~SQL
+    INSERT INTO posts(song_link, caption, username)
+    VALUES($1, $2, $3)
+    SQL
+    @db.exec_params(sql, [song_link, caption, username])
+  end
   private
 
   # Abstracts out manually creating debug lines each time we run an sql query.

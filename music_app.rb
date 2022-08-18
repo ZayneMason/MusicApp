@@ -44,36 +44,41 @@ get "/users/create" do
 end
 
 post "/users/create" do
-  if params[:new_password] != params[:confirm_password]
-    session[:message] = "Please make sure passwords match."
-    redirect "/users/create"
-  elsif !@storage.valid_username?(params[:username])
+  if @storage.valid_username?(params[:username]) == false
     session[:message] = "Username is already taken."
     redirect "/users/create"
-  elsif params[:username].length >= 19 || params[:username].length < 1
-    session[:message] = "Please make sure username is 18 or less characters and not empty."
+  elsif params[:username].length > 18 || params[:username].length < 1
+    session[:message] = "Please make sure username is between 1 and 18 characters long."
     redirect "/users/create"
-  else
-    @storage.create_user(params[:username], params[:password])
-    session[:message] = "Account created. Welcome to music app."
-    session[:username] = params[:username]
-    redirect "/"
   end
+  @storage.create_user(params[:username], params[:new_password])
+  redirect "/"
 end
 
+# DISPLAY A LIST OF POSTS FROM USERS USER FOLLOWS
 get "/" do
   redirect "/users/login" unless session[:username]
   @posts = @storage.get_posts_for_list(session[:username])
   erb :post_list, layout: :layout
 end
 
+get "/users/posts/new" do
+  redirect "/users/login" unless session[:username]
+  erb :create_post, layout: :layout
+end
 
-# DISPLAY A LIST OF POSTS FROM USERS USER FOLLOWS
-# DISPLAY A LIST OF POSTS FROM USERS THAT THE USER DOES NOT FOLLOW
-# LIKE OR COMMENT ON THESE POSTS
-# FOLLOW NEW USERS
-# CREATE AND DELETE POSTS
-# VIEW LIKES AND COMMENTS ON A POST
+post "/users/posts/new" do
+  redirect "/users/login" unless session[:username]
+
+  if params[:caption].length > 140
+    session[:message] = "Please make sure caption is 140 characters or less."
+    redirect "/users/post/new"
+  end
+
+  @storage.create_post(params[:song_link], params[:caption], session[:username])
+  session[:message] = "Post created!"
+  redirect "/"
+end
 
 after do
   @storage.disconnect

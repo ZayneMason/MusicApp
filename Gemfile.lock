@@ -5,25 +5,25 @@ GEM
     bcrypt (3.1.18)
     builder (3.2.4)
     erubis (2.7.0)
-    eventmachine (1.2.7)
-    mini (0.0.2)
-      eventmachine (~> 1.0)
-      rack (~> 1.0)
     minitest (5.16.3)
     minitest-reporters (1.5.0)
       ansi
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    mustermann (2.0.2)
+      ruby2_keywords (~> 0.0.1)
     pg (1.4.3)
-    rack (1.6.13)
-    rack-protection (1.5.5)
+    rack (2.2.4)
+    rack-protection (2.2.2)
       rack
     ruby-progressbar (1.11.0)
-    sinatra (1.4.8)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
+    ruby2_keywords (0.0.5)
+    sinatra (2.2.2)
+      mustermann (~> 2.0)
+      rack (~> 2.2)
+      rack-protection (= 2.2.2)
+      tilt (~> 2.0)
     tilt (2.0.11)
 
 PLATFORMS
@@ -32,11 +32,11 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   erubis
-  mini
+  minitest
   minitest-reporters
   pg
-  rack
-  sinatra
+  rack (>= 2.2)
+  sinatra (>= 2.2.0)
 
 RUBY VERSION
    ruby 2.7.4p191

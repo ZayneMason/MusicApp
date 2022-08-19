@@ -4,7 +4,18 @@
   <% @posts.each do |post| %>
     <li>
       <h3><%= post[:username] %></h3>
-      <p><%= post[:song_link] %><p>
+      <p><a href="<%= post[:song_link] %>"><%= post[:song_link] %></a><p>
+      <% if post[:song_link].include?("spotify.com") %>
+          <iframe  height="90" width="160" src="<%= post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
+          title="Spotify player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        <% elsif post[:song_link].include?("youtube.com") %>
+          <iframe height="90" width="160" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
+          title="YouTube video player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        <% end %>
       <p><%= post[:caption] %><p>
       <p><%= post[:time_of_post] %><p>
     </li>

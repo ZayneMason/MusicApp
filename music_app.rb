@@ -22,6 +22,11 @@ end
 def valid_login?(username, password)
   @storage.valid_user?(username, password)
 end
+
+def valid_link?(link)
+  link.include?("https://www.youtube.com/watch?") ||
+  link.include?("https://open.spotify.com/")
+end
 # LOG IN TO USER
 get "/users/login" do
   erb :login, layout: :layout
@@ -72,7 +77,10 @@ post "/users/posts/new" do
 
   if params[:caption].length > 140
     session[:message] = "Please make sure caption is 140 characters or less."
-    redirect "/users/post/new"
+    redirect "/users/posts/new"
+  elsif valid_link?(params[:song_link]) == false
+    session[:message] = "Please make sure that the link provided is a valid Spotify or Youtube link."
+    redirect "/users/posts/new"
   end
 
   @storage.create_post(params[:song_link], params[:caption], session[:username])

@@ -74,6 +74,7 @@ get "/users/posts/new" do
   erb :create_post, layout: :layout
 end
 
+# CREATE A NEW POST
 post "/users/posts/new" do
   redirect "/users/login" unless session[:username]
 
@@ -90,6 +91,7 @@ post "/users/posts/new" do
   redirect "/"
 end
 
+# VIEW THREAD OF A SINGLE POST
 get "/posts/:post_id" do
   redirect "/users/login" unless session[:username]
   @post = @storage.get_post(params[:post_id])

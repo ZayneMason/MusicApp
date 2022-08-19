@@ -94,8 +94,22 @@ end
 # VIEW THREAD OF A SINGLE POST
 get "/posts/:post_id" do
   redirect "/users/login" unless session[:username]
-  @post = @storage.get_post(params[:post_id])
+  @post = @storage.get_post_thread(params[:post_id])
   erb :single_post, layout: :layout
+end
+
+# ADD A COMMENT TO A POST'S THREAD
+post "/posts/:post_id/comments" do
+  redirect "/users/login" unless session[:username]
+  if params[:new_comment].length > 140
+    session[:message] = "Please keep comments 140 characters or less."
+    redirect back
+  elsif params[:new_comment].length == 0
+    session[:message] = "Please make sure comment box is not empty."
+    redirect back
+  end
+  @storage.create_comment(session[:username], params[:post_id], params[:new_comment])
+  redirect back
 end
 
 after do

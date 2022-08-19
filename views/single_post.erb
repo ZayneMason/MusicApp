@@ -1,0 +1,46 @@
+<div id="post">
+  <h3>Posted by: <%= @post[:username] %></h3>
+  <p id="time_of_post">Posted at: <%= @post[:time_of_post] %></p>
+  <% if @post[:song_link].include?("spotify.com") %>
+    <% if @post[:song_link].include?("playlist")%>
+      <iframe id="embed"  height="90" width="320" src="<%= @post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
+      title="Spotify player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+    <% else %>
+      <iframe id="embed"  height="90" width="320" src="<%= @post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
+      title="Spotify player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+    <% end %>
+  <% elsif @post[:song_link].include?("youtube.com") %>
+    <% if @post[:song_link].include?("playlist") %>
+      <iframe id="embed" height="180" width="320" src="<%= @post[:song_link].gsub("playlist?", "embed/videoseries?") %>"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    <% else %>
+      <iframe id="embed" height="180" width="320" src="<%= @post[:song_link].gsub("watch?v=", "embed/") %>"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    <% end %>
+  <% end %>
+  <p id="caption">Caption: <%= @post[:caption] %></p>
+  <p id="like_count">Likes: <%= @post[:likes] %></p>
+  <p id="song_link"><a href="<%= @post[:song_link] %>">Listen here</a><p>
+</div>
+
+<h3>Comments:</h3>
+<form method="post" action="/posts/<%= @post[:id]%>/comments">
+<div>
+  <textarea name="new_comment" id="new_comment" rows="3" cols="28"></textarea>
+</div>
+<button type="submit">Add comment</button>
+<% @post[:comments].each do |comment| %>
+  <div id="comment">
+    <b id="comment_username"><%= comment[:comment_username]%></b>
+    <p id="comment_comment"><%= comment[:comment_comment] %></p>
+    <p id="comment_time"><%= comment[:comment_time] %></p>
+  </div>
+<% end %>

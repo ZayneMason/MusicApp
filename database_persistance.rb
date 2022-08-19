@@ -66,13 +66,51 @@ class DatabasePersistance
     @db.exec_params(sql, [song_link, caption, username])
   end
 
-  def get_post(post_id)
+  def get_post_thread(post_id)
+    post = {
+      id: '',
+      username: '',
+      time_of_post: '',
+      caption: '',
+      song_link: '',
+      likes: '',
+      comments: []
+      }
+
     sql = <<~SQL
-    SELECT posts.username, posts.time_of, posts.caption, posts.song_link,
-    count(likes.username) AS post_likes, comments.
+    SELECT posts.id, posts.username, posts.time_of, posts.caption, 
+    posts.song_link, count(likes.username) AS post_likes FROM posts
+    LEFT OUTER JOIN likes ON likes.post_id = posts.id
+    WHERE posts.id = $1
+    GROUP BY posts.id
+    ORDER BY posts.time_of DESC
     SQL
+    result = @db.exec_params(sql, [post_id])
+
+
+    result.each do |tuple|
+        post[:id] = tuple["id"]
+        post[:username] = tuple["username"]
+        post[:time_of_post] = tuple["time_of"]
+        post[:caption] = tuple["caption"]
+        post[:song_link] = tuple["song_link"]
+        post[:likes] = tuple["post_likes"]
+    end
+    sql = "SELECT username, comment, time_of FROM comments WHERE post_id = $1"
+    next_result = @db.exec_params(sql, [post_id])
+    next_result.each do |tuple|
+      post[:comments] << { comment_username: tuple["username"],
+                           comment_comment: tuple["comment"],
+                           comment_time: tuple["time_of"] }
+    end
+    post
   end
 
+  def create_comment(username, post_id, comment)
+    sql = "INSERT INTO comments(username, post_id, comment) VALUES ($1, $2, $3)"
+    @db.exec_params(sql, [username, post_id, comment])
+  end
+  
   private
 
   # Abstracts out manually creating debug lines each time we run an sql query.

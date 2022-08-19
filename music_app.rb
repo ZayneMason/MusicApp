@@ -25,7 +25,9 @@ end
 
 def valid_link?(link)
   link.include?("https://www.youtube.com/watch?") ||
-  link.include?("https://open.spotify.com/")
+  link.include?("https://youtube.com/playlist?") ||
+  link.include?("https://open.spotify.com/track") ||
+  link.include?("https://open.spotify.com/playlist/")
 end
 # LOG IN TO USER
 get "/users/login" do

@@ -17,12 +17,19 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         <% end %>
-        <% elsif post[:song_link].include?("youtube.com") %>
+      <% elsif post[:song_link].include?("youtube.com") %>
+        <% if post[:song_link].include?("playlist") %>
+          <iframe id="embed" height="180" width="320" src="<%= post[:song_link].gsub("playlist?", "embed/videoseries?") %>"
+           title="YouTube video player" frameborder="0"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+           allowfullscreen></iframe>
+        <% else %>
           <iframe id="embed" height="180" width="320" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
-          title="YouTube video player" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+           title="YouTube video player" frameborder="0"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+           allowfullscreen></iframe>
         <% end %>
+      <% end %>
       <p id="caption">Caption: <%= post[:caption] %></p>
       <p id="like_count">Likes: <%= post[:likes] %></p>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>

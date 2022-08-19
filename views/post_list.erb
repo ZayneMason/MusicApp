@@ -4,7 +4,7 @@
 <ol>
   <% @posts.each do |post| %>
     <div id="post">
-      <h3><%= post[:username] %></h3>
+      <h3><a href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
       <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
@@ -34,6 +34,9 @@
       <p id="caption">Caption: <%= post[:caption] %></p>
       <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
+      <form action = "/posts/<%= post[:id]%>/likes" method = "post">
+        <button>Like</button>
+      </form>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
     </div>
   <% end %>

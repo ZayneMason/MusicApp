@@ -1,5 +1,5 @@
 <div id="post">
-  <h3>Posted by: <%= @post[:username] %></h3>
+  <h3>Posted by: <a href="/users/<%= @post[:username] %>"><%=@post[:username]%></a></h3>
   <p id="time_of_post">Posted at: <%= @post[:time_of_post] %></p>
   <% if @post[:song_link].include?("spotify.com") %>
     <% if @post[:song_link].include?("playlist")%>
@@ -29,6 +29,9 @@
   <p id="caption">Caption: <%= @post[:caption] %></p>
   <p id="counts">Likes: <%= @post[:likes] %> Comments: <%= @post[:comments].count %></p>
   <p id="song_link"><a href="<%= @post[:song_link] %>">Listen here</a><p>
+  <form action = "/posts/<%= @post[:id]%>/likes" method = "post">
+        <button>Like</button>
+  </form>
 </div>
 
 <h3>Comments:</h3>

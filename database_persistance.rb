@@ -114,6 +114,22 @@ class DatabasePersistance
     @db.exec_params(sql, [username, post_id, comment])
   end
 
+  def new_like?(username, post_id)
+    sql = "SELECT username FROM likes WHERE username = $1 AND post_id = $2"
+    result = @db.exec_params(sql, [username, post_id])
+    result.values.empty?
+  end
+
+  def create_like(username, post_id)
+    sql = "INSERT INTO likes(username, post_id) VALUES ($1, $2)"
+    @db.exec_params(sql, [username, post_id])
+  end
+
+  def delete_like(username, post_id)
+    sql = "DELETE FROM likes WHERE username = $1 AND post_id = $2"
+    @db.exec_params(sql, [username, post_id])
+  end
+
   def get_user_posts(username)
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 

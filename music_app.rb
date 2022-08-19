@@ -112,6 +112,17 @@ post "/posts/:post_id/comments" do
   session.delete(:new_comment)
   redirect back
 end
+
+post "/posts/:post_id/likes" do
+  redirect "/users/login" unless session[:username]
+  if @storage.new_like?(session[:username], params[:post_id])
+    @storage.create_like(session[:username], params[:post_id])
+  else
+    @storage.delete_like(session[:username], params[:post_id])
+  end
+  redirect back
+end
+
 # VIEW A SPECIFIC USER'S PROFILE
 get "/users/:username" do
   @user_posts = @storage.get_user_posts(params[:username])

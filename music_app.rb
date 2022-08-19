@@ -88,6 +88,12 @@ post "/users/posts/new" do
   redirect "/"
 end
 
+get "/posts/:post_id" do
+  redirect "/users/login" unless session[:username]
+  @post = @storage.get_post(params[:post_id])
+  erb :single_post, layout: :layout
+end
+
 after do
   @storage.disconnect
 end

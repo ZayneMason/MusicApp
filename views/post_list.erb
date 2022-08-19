@@ -4,20 +4,29 @@
   <% @posts.each do |post| %>
     <li>
       <h3><%= post[:username] %></h3>
-      <p><a href="<%= post[:song_link] %>"><%= post[:song_link] %></a><p>
+      <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
-          <iframe  height="90" width="160" src="<%= post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
+        <% if post[:song_link].include?("playlist")%>
+          <iframe id="embed"  height="90" width="320" src="<%= post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
           title="Spotify player" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
+        <% else %>
+          <iframe id="embed"  height="90" width="320" src="<%= post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
+          title="Spotify player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        <% end %>
         <% elsif post[:song_link].include?("youtube.com") %>
-          <iframe height="90" width="160" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
+          <iframe id="embed" height="180" width="320" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
           title="YouTube video player" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         <% end %>
-      <p><%= post[:caption] %><p>
-      <p><%= post[:time_of_post] %><p>
+      <p id="caption">Caption: <%= post[:caption] %></p>
+      <p id="like_count">Likes: <%= post[:likes] %></p>
+      <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
+      <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
     </li>
   <% end %>
 </ol>

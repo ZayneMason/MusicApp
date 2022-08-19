@@ -28,7 +28,7 @@ class DatabasePersistance
   end
 
   def create_user(username, password)
-    sql = "INSERT INTO users(username, pass) VALUES ($1, crypt($2, gen_salt('bf'))"
+    sql = "INSERT INTO users(username, pass) VALUES ($1, crypt($2, gen_salt('bf')))"
     query(sql, username, password)
     sql = "INSERT INTO follows(username, follower) VALUES ($1, $2)"
     query(sql, username, username)
@@ -36,19 +36,24 @@ class DatabasePersistance
 
   def get_posts_for_list(username)
     sql = <<~SQL
-    SELECT posts.username, posts.time_of, posts.caption, posts.song_link FROM posts
+    SELECT posts.id, posts.username, posts.time_of, posts.caption, 
+    posts.song_link, count(likes.username) AS post_likes FROM posts
     INNER JOIN follows ON posts.username = follows.username
+    LEFT OUTER JOIN likes ON likes.post_id = posts.id
     WHERE follows.follower = $1
+    GROUP BY posts.id
     ORDER BY posts.time_of DESC
     SQL
     result = @db.exec_params(sql, [username])
 
     result.map do |tuple|
       {
+        id: tuple["id"],
         username: tuple["username"],
         time_of_post: tuple["time_of"],
         caption: tuple["caption"],
-        song_link: tuple["song_link"]
+        song_link: tuple["song_link"],
+        likes: tuple["post_likes"]
       }
     end
   end
@@ -60,6 +65,14 @@ class DatabasePersistance
     SQL
     @db.exec_params(sql, [song_link, caption, username])
   end
+
+  def get_post(post_id)
+    sql = <<~SQL
+    SELECT posts.username, posts.time_of, posts.caption, posts.song_link,
+    count(likes.username) AS post_likes, comments.
+    SQL
+  end
+
   private
 
   # Abstracts out manually creating debug lines each time we run an sql query.

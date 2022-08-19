@@ -109,7 +109,14 @@ post "/posts/:post_id/comments" do
     redirect back
   end
   @storage.create_comment(session[:username], params[:post_id], params[:new_comment])
+  session.delete(:new_comment)
   redirect back
+end
+# VIEW A SPECIFIC USER'S PROFILE
+get "/users/:username" do
+  @user_posts = @storage.get_user_posts(params[:username])
+  @user_stats = @storage.get_user_stats(params[:username])
+  erb :user, layout: :layout
 end
 
 after do

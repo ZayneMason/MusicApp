@@ -27,7 +27,7 @@
     <% end %>
   <% end %>
   <p id="caption">Caption: <%= @post[:caption] %></p>
-  <p id="like_count">Likes: <%= @post[:likes] %></p>
+  <p id="counts">Likes: <%= @post[:likes] %> Comments: <%= @post[:comments].count %></p>
   <p id="song_link"><a href="<%= @post[:song_link] %>">Listen here</a><p>
 </div>
 

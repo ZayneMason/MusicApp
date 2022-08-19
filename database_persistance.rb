@@ -37,9 +37,11 @@ class DatabasePersistance
   def get_posts_for_list(username)
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.username) AS post_likes FROM posts
+    posts.song_link, count(likes.username) AS post_likes,
+    count(comments.comment) AS post_comments FROM posts
     INNER JOIN follows ON posts.username = follows.username
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
+    LEFT OUTER JOIN comments ON comments.post_id = posts.id
     WHERE follows.follower = $1
     GROUP BY posts.id
     ORDER BY posts.time_of DESC
@@ -53,7 +55,8 @@ class DatabasePersistance
         time_of_post: tuple["time_of"],
         caption: tuple["caption"],
         song_link: tuple["song_link"],
-        likes: tuple["post_likes"]
+        likes: tuple["post_likes"],
+        comments: tuple["post_comments"]
       }
     end
   end
@@ -110,7 +113,58 @@ class DatabasePersistance
     sql = "INSERT INTO comments(username, post_id, comment) VALUES ($1, $2, $3)"
     @db.exec_params(sql, [username, post_id, comment])
   end
-  
+
+  def get_user_posts(username)
+    sql = <<~SQL
+    SELECT posts.id, posts.username, posts.time_of, posts.caption, 
+    posts.song_link, count(likes.username) AS post_likes,
+    count(comments.comment) AS post_comments FROM posts
+    LEFT OUTER JOIN likes ON likes.post_id = posts.id
+    LEFT OUTER JOIN comments ON comments.post_id = posts.id
+    WHERE posts.username = $1
+    GROUP BY posts.id
+    ORDER BY posts.time_of DESC
+    SQL
+    result = @db.exec_params(sql, [username])
+
+    result.map do |tuple|
+      {
+        id: tuple["id"],
+        username: tuple["username"],
+        time_of_post: tuple["time_of"],
+        caption: tuple["caption"],
+        song_link: tuple["song_link"],
+        likes: tuple["post_likes"],
+        comments: tuple["post_comments"]
+      }
+    end
+  end
+
+  def get_user_stats(username)
+    user = {
+            username: '',
+            follower_count: '',
+            following_count: '',
+            post_count: ''
+            }
+    sql = <<~SQL
+    SELECT (SELECT users.username FROM users WHERE users.username = $1) AS username,
+    (SELECT count(follows.follower) FROM follows WHERE follows.follower = $1) AS following_count,
+    (SELECT count(follows.username) FROM follows WHERE follows.username = $1) AS follower_count,
+    (SELECT count(posts.id) FROM POSTS WHERE posts.username = $1) AS post_count FROM follows
+    LIMIT 1
+    SQL
+    
+    result = @db.exec_params(sql, [username])
+    result.each do |tuple|
+      user[:username] = tuple["username"]
+      user[:follower_count] = tuple["follower_count"]
+      user[:following_count] = tuple["following_count"]
+      user[:post_count] = tuple["post_count"]
+    end
+    user
+  end
+
   private
 
   # Abstracts out manually creating debug lines each time we run an sql query.

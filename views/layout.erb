@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <title>Music App</title>
+  <head>
+    <title>Music App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
    <body>
     <% if session[:message] %>
       <p class="message"><%= session.delete(:message) %></p>

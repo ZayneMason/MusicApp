@@ -1,11 +1,11 @@
 
 <h1>Your feed</h1>
-<a id="new_post_link" href="/users/posts/new">Create a new post!</a>
-<a class="feed_swap" href="/browse">Top posts of the week</a>
+<a class="link" id="new_post_link" href="/users/posts/new">Create a new post!</a>
+<a class="link" id="feed_swap" href="/browse">Top posts of the week</a>
 <ol>
   <% @posts.each do |post| %>
     <div id="post">
-      <h3><a href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
+      <h3><a id="username_link" href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
       <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
@@ -21,12 +21,12 @@
         <% end %>
       <% elsif post[:song_link].include?("youtube.com") %>
         <% if post[:song_link].include?("playlist") %>
-          <iframe id="embed" height="180" width="320" src="<%= post[:song_link].gsub("playlist?", "embed/videoseries?") %>"
+          <iframe class="embed" height="180" width="320" src="<%= post[:song_link].gsub("playlist?", "embed/videoseries?") %>"
            title="YouTube video player" frameborder="0"
            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
            allowfullscreen></iframe>
         <% else %>
-          <iframe id="embed" height="180" width="320" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
+          <iframe class="embed" height="180" width="320" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
            title="YouTube video player" frameborder="0"
            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
            allowfullscreen></iframe>

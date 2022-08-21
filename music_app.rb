@@ -23,6 +23,10 @@ helpers do
   def liked?(username, post_id)
     @storage.new_like?(username, post_id) == false
   end
+
+  def logged_in?
+    session[:username] == true
+  end
 end
 
 before do
@@ -50,9 +54,14 @@ post "/users/login" do
     session[:username] = params[:username]
     redirect "/"
   else
-    session[:message] = "Invalid username/password. Please try again."
+    session[:error] = "Invalid username/password. Please try again."
     redirect "/users/login"
   end
+end
+
+post "/logout" do
+  session.delete(:username)
+  redirect "/users/login"
 end
 
 # CREATE NEW USER
@@ -62,10 +71,10 @@ end
 
 post "/users/create" do
   if @storage.valid_username?(params[:username]) == false
-    session[:message] = "Username is already taken."
+    session[:error] = "Username is already taken."
     redirect "/users/create"
   elsif params[:username].length > 18 || params[:username].length < 1
-    session[:message] = "Please make sure username is between 1 and 18 characters long."
+    session[:error] = "Please make sure username is between 1 and 18 characters long."
     redirect "/users/create"
   end
   @storage.create_user(params[:username], params[:new_password])
@@ -96,10 +105,10 @@ post "/users/posts/new" do
   redirect "/users/login" unless session[:username]
 
   if params[:caption].length > 140
-    session[:message] = "Please make sure caption is 140 characters or less."
+    session[:error] = "Please make sure caption is 140 characters or less."
     redirect "/users/posts/new"
   elsif valid_link?(params[:song_link]) == false
-    session[:message] = "Please make sure that the link provided is a valid Spotify or Youtube link."
+    session[:error] = "Please make sure that the link provided is a valid Spotify or Youtube link."
     redirect "/users/posts/new"
   end
 
@@ -119,14 +128,15 @@ end
 post "/posts/:post_id/comments" do
   redirect "/users/login" unless session[:username]
   if params[:new_comment].length > 140
-    session[:message] = "Please keep comments 140 characters or less."
+    session[:error] = "Please keep comments 140 characters or less."
     redirect back
   elsif params[:new_comment].length == 0
-    session[:message] = "Please make sure comment box is not empty."
+    session[:error] = "Please make sure comment box is not empty."
     redirect back
   end
   @storage.create_comment(session[:username], params[:post_id], params[:new_comment])
   session.delete(:new_comment)
+  session[:message] = "Comment posted."
   redirect back
 end
 

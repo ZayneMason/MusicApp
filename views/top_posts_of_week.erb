@@ -34,9 +34,15 @@
       <p id="caption">Caption: <%= post[:caption] %></p>
       <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
-      <form action = "/posts/<%= post[:id]%>/likes" method = "post">
-        <button>Like</button>
-      </form>
+      <% if liked?(@session[:username], post[:id])%>  
+        <form action = "/posts/<%= post[:id]%>/likes" method = "post">
+          <button>Unlike</button>
+        </form>
+      <% else %>
+        <form action = "/posts/<%= post[:id]%>/likes" method = "post">
+          <button>Like</button>
+        </form>
+      <% end %>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
     </div>
   <% end %>

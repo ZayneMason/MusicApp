@@ -15,6 +15,16 @@ configure(:development) do
   also_reload "database_persistance.rb"
 end
 
+helpers do
+  def following?(user_to_follow, username)
+    @storage.new_follow?(user_to_follow, username) == false
+  end
+
+  def liked?(username, post_id)
+    @storage.new_like?(username, post_id) == false
+  end
+end
+
 before do
   @storage = DatabasePersistance.new(logger)
 end
@@ -65,12 +75,14 @@ end
 # DISPLAY A LIST OF POSTS FROM USERS USER FOLLOWS
 get "/" do
   redirect "/users/login" unless session[:username]
+  @session = session
   @posts = @storage.get_posts_for_list(session[:username])
   erb :post_list, layout: :layout
 end
 
 get "/browse" do
   @posts = @storage.get_top_posts
+  @session = session
   erb :top_posts_of_week, layout: :layout
 end
 
@@ -132,6 +144,7 @@ end
 get "/users/:username" do
   @user_posts = @storage.get_user_posts(params[:username])
   @user_stats = @storage.get_user_stats(params[:username])
+  @session = session
   erb :user, layout: :layout
 end
 

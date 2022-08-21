@@ -69,6 +69,11 @@ get "/" do
   erb :post_list, layout: :layout
 end
 
+get "/browse" do
+  @posts = @storage.get_top_posts
+  erb :top_posts_of_week, layout: :layout
+end
+
 get "/users/posts/new" do
   redirect "/users/login" unless session[:username]
   erb :create_post, layout: :layout
@@ -128,6 +133,17 @@ get "/users/:username" do
   @user_posts = @storage.get_user_posts(params[:username])
   @user_stats = @storage.get_user_stats(params[:username])
   erb :user, layout: :layout
+end
+
+post "/users/:username/follow" do
+  redirect "/users/login" unless session[:username]
+  user_to_follow = params[:username]
+  if @storage.new_follow?(user_to_follow, session[:username])
+    @storage.create_follow(user_to_follow, session[:username])
+  else
+    @storage.delete_follow(user_to_follow, session[:username])
+  end
+  redirect back
 end
 
 after do

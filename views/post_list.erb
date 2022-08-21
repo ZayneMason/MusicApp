@@ -1,6 +1,7 @@
 
 <h1>Your feed</h1>
-<a class="post_link" href="/users/posts/new">Create a new post!</a>
+<a id="new_post_link" href="/users/posts/new">Create a new post!</a>
+<a class="feed_swap" href="/browse">Top posts of the week</a>
 <ol>
   <% @posts.each do |post| %>
     <div id="post">

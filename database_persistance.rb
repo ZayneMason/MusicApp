@@ -61,6 +61,33 @@ class DatabasePersistance
     end
   end
 
+  def get_top_posts
+    sql = <<~SQL
+    SELECT  DISTINCT posts.id, posts.username, posts.time_of, posts.caption, 
+    posts.song_link, count(likes.username) AS post_likes,
+    count(comments.comment) AS post_comments FROM posts
+    LEFT OUTER JOIN likes ON likes.post_id = posts.id
+    LEFT OUTER JOIN comments ON comments.post_id = posts.id
+    WHERE posts.time_of > current_date - interval '7 days'
+    GROUP BY posts.id
+    ORDER BY post_likes DESC
+    LIMIT 100
+    SQL
+    result = @db.exec_params(sql)
+
+    result.map do |tuple|
+      {
+        id: tuple["id"],
+        username: tuple["username"],
+        time_of_post: tuple["time_of"],
+        caption: tuple["caption"],
+        song_link: tuple["song_link"],
+        likes: tuple["post_likes"],
+        comments: tuple["post_comments"]
+      }
+    end
+  end
+
   def create_post(song_link, caption, username)
     sql = <<~SQL
     INSERT INTO posts(song_link, caption, username)
@@ -179,6 +206,22 @@ class DatabasePersistance
       user[:post_count] = tuple["post_count"]
     end
     user
+  end
+
+  def new_follow?(username, follower)
+    sql = "SELECT username, follower FROM follows WHERE username = $1 AND follower = $2"
+    result = @db.exec_params(sql, [username, follower])
+    result.values.empty?
+  end
+
+  def create_follow(username, follower)
+    sql = "INSERT INTO follows(username, follower) VALUES($1, $2)"
+    @db.exec_params(sql, [username, follower])
+  end
+
+  def delete_follow(username, follower)
+    sql = "DELETE FROM follows WHERE username = $1 AND follower = $2"
+    @db.exec_params(sql, [username, follower])
   end
 
   private

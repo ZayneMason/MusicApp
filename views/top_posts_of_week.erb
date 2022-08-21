@@ -1,13 +1,10 @@
-<h2 id="big_username"><%= @user_stats[:username] %></h2>
-<h3 id="big_counts">Followers: <%= @user_stats[:follower_count] %></h3>
-<h3 id="big_counts">Following: <%= @user_stats[:following_count] %></h3>
-<form action ="/users/<%= @user_stats[:username] %>/follow" method = "post">
-  <button id="follow_button">Follow</button>
-</form>
-<h3 id="big_counts">Posts: <%= @user_stats[:post_count] %></h3>
-<h2 id="posts_banner">Posts:</h2>
-<% @user_posts.each do |post| %>
- <div id="post">
+<h1>Your feed</h1>
+<a id="new_post_link" href="/users/posts/new">Create a new post!</a>
+<a class="feed_swap" href="/">Posts from people you follow</a>
+<ol>
+  <% @posts.each do |post| %>
+    <div id="post">
+      <h3><a href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
       <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
@@ -36,10 +33,11 @@
       <% end %>
       <p id="caption">Caption: <%= post[:caption] %></p>
       <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
+      <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <form action = "/posts/<%= post[:id]%>/likes" method = "post">
         <button>Like</button>
       </form>
-      <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
-  </div>
-<% end %>
+    </div>
+  <% end %>
+</ol>

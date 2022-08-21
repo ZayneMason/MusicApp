@@ -37,11 +37,11 @@
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <% if liked?(@session[:username], post[:id])%>  
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
-          <button>Unlike</button>
+          <button id="like_button">Unlike</button>
         </form>
       <% else %>
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
-          <button>Like</button>
+          <button id="like_button">Like</button>
         </form>
       <% end %>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>

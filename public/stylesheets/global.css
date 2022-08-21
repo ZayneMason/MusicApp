@@ -1,0 +1,13 @@
+html * {
+  font-family: Arial !important;
+  color: rgb(226, 226, 226);
+  background-color: #2c2a2a;
+}
+
+#username_link {
+  color: rgb(0, 255, 136);
+}
+
+#like_button {
+  
+}

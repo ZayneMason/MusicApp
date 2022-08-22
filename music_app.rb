@@ -27,10 +27,6 @@ helpers do
   def liked?(username, post_id)
     @storage.new_like?(username, post_id) == false
   end
-
-  def logged_in?
-    session[:username] == true
-  end
 end
 
 
@@ -87,14 +83,12 @@ end
 # DISPLAY A LIST OF POSTS 
 get "/" do
   redirect "/users/login" unless session[:username]
-  @session = session
   @posts = @storage.get_posts_for_list(session[:username])
   erb :post_list, layout: :layout
 end
 
 get "/browse" do
   @posts = @storage.get_top_posts
-  @session = session
   erb :top_posts_of_week, layout: :layout
 end
 
@@ -158,7 +152,6 @@ end
 get "/users/:username" do
   @user_posts = @storage.get_user_posts(params[:username])
   @user_stats = @storage.get_user_stats(params[:username])
-  @session = session
   erb :user, layout: :layout
 end
 

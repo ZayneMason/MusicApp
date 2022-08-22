@@ -15,7 +15,7 @@
     <% if session[:error] %>
       <p id="session_error"><%= session.delete(:error) %></p>
     <% end %>
-    <% if logged_in? == true %>
+    <% if session[:username] %>
       <form action="/logout" method="post">
         <button id="logout_button">Logout</button>
       </form>

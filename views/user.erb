@@ -1,3 +1,8 @@
+<% if @user_stats[:username] == session[:username] %>
+    <form action="employee.action" method="post">
+      <input type="submit" value="Logout" />
+    </form>
+<% end %>
 <h2 id="big_username"><%= @user_stats[:username] %></h2>
 <h3 id="big_counts">Followers: <%= @user_stats[:follower_count] %></h3>
 <h3 id="big_counts">Following: <%= @user_stats[:following_count] %></h3>
@@ -52,5 +57,11 @@
       <% end %>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
+      <% if @user_stats[:username] == session[:username] %>
+        <form action="/posts/<%= post[:id] %>/delete" method="post">
+          <button type="submit" id="delete_post_button">Delete post</button>
+        </form>
+      <% end %>
   </div>
 <% end %>
+  

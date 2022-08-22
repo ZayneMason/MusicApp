@@ -2,11 +2,9 @@
 <html>
   <head>
     <title>Music App</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="/stylesheets/global.css">
-    <script src="buttons.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
    <body>
     <% if session[:message] %>
@@ -16,14 +14,11 @@
       <p id="session_error"><%= session.delete(:error) %></p>
     <% end %>
     <% if session[:username] %>
-      <form action="/logout" method="post">
-        <button id="logout_button">Logout</button>
-      </form>
-      <div id="search">
+      <div class="topnav">
+        <a href="/">Browse Posts</a>
+        <a href="/users/<%= session[:username] %>">Your profile</a>
         <form action="/search" method="post">
-          <label for="search">Search username:
-            <input id="search" value="<%= params[:search] %>"/>
-          </label>
+          <input name="search" type="text" value="<%= params[:search] %>" placeholder="Search users..." />
         </form>
       </div>
     <% end %>

@@ -114,6 +114,15 @@ post "/users/posts/new" do
   redirect "/"
 end
 
+# DELETE A POST
+post "/posts/:post_id/delete" do
+  redirect back unless @storage.post_belong_to_user?(session[:username], params[:post_id])
+  @storage.delete_post(params[:post_id])
+  session[:message] = "Post has been removed."
+  redirect "/"
+end
+
+
 # VIEW THREAD OF A SINGLE POST
 get "/posts/:post_id" do
   redirect "/users/login" unless session[:username]
@@ -167,12 +176,15 @@ post "/users/:username/follow" do
   redirect back
 end
 
-# CREATING FEATURE TO SEARCH FOR USERS BASED ON USERNAME
+# FEATURE TO SEARCH FOR USERS BASED ON USERNAME
 post "/search" do
-  @search_results = @storage.search_users(params[:search])
+  session[:search_results] = @storage.search_users(params[:search])
+  redirect "/search_results"
 end
 
 get "/search_results"  do
+  @search_results = session.delete(:search_results)
+  erb :search_results, layout: :layout
 end
 
 after do

@@ -37,7 +37,7 @@ class DatabasePersistance
   def get_posts_for_list(username)
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.username) AS post_likes,
+    posts.song_link, count(likes.post_id) AS post_likes,
     count(comments.comment) AS post_comments FROM posts
     INNER JOIN follows ON posts.username = follows.username
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
@@ -224,11 +224,20 @@ class DatabasePersistance
     @db.exec_params(sql, [username, follower])
   end
 
-  private
+  def search_users(search_term)
+    sql = "SELECT username FROM users WHERE username ILIKE CONCAT($1::text, '%')"
+    result = @db.exec_params(sql, [search_term])
+    result.values
+  end
 
-  # Abstracts out manually creating debug lines each time we run an sql query.
-  def query(statement, *params)
-    @logger.info "#{statement}: #{params}"
-    @db.exec_params(statement, params)
+  def post_belong_to_user?(username, post_id)
+    sql = "SELECT posts.id FROM posts WHERE username = $1 and id = $2"
+    result = @db.exec_params(sql, [username, post_id])
+    result.values.empty? == false
+  end
+
+  def delete_post(post_id)
+    sql = "DELETE FROM posts WHERE id = $1"
+    @db.exec_params(sql, [post_id])
   end
 end

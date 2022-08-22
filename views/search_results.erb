@@ -1,0 +1,5 @@
+<% @search_results.each do |user| %>
+  <div class="search-result">
+    <h3><a id="username_link" href="/users/<%= user[0] %>"><%= user[0] %></a></h3>
+  </div>
+<% end %>

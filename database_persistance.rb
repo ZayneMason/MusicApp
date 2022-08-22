@@ -37,37 +37,34 @@ class DatabasePersistance
   def get_posts_for_list(username)
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.post_id) AS post_likes,
-    count(comments.comment) AS post_comments FROM posts
-    INNER JOIN follows ON posts.username = follows.username
+    posts.song_link, count(likes.username) AS post_likes FROM posts
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
-    LEFT OUTER JOIN comments ON comments.post_id = posts.id
-    WHERE follows.follower = $1
+    INNER JOIN follows ON follows.follower = $1
+    WHERE follows.username = posts.username
     GROUP BY posts.id
     ORDER BY posts.time_of DESC
     SQL
     result = @db.exec_params(sql, [username])
 
+
     result.map do |tuple|
-      {
-        id: tuple["id"],
-        username: tuple["username"],
-        time_of_post: tuple["time_of"],
-        caption: tuple["caption"],
-        song_link: tuple["song_link"],
-        likes: tuple["post_likes"],
-        comments: tuple["post_comments"]
-      }
+        {
+          id: tuple["id"],
+          username: tuple["username"],
+          time_of_post: tuple["time_of"],
+          caption: tuple["caption"],
+          song_link: tuple["song_link"],
+          likes: tuple["post_likes"],
+
+        }
     end
   end
 
   def get_top_posts
     sql = <<~SQL
-    SELECT  DISTINCT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.username) AS post_likes,
-    count(comments.comment) AS post_comments FROM posts
+    SELECT posts.id, posts.username, posts.time_of, posts.caption, 
+    posts.song_link, count(likes.username) AS post_likes FROM posts
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
-    LEFT OUTER JOIN comments ON comments.post_id = posts.id
     WHERE posts.time_of > current_date - interval '7 days'
     GROUP BY posts.id
     ORDER BY post_likes DESC
@@ -75,16 +72,16 @@ class DatabasePersistance
     SQL
     result = @db.exec_params(sql)
 
+
     result.map do |tuple|
-      {
-        id: tuple["id"],
-        username: tuple["username"],
-        time_of_post: tuple["time_of"],
-        caption: tuple["caption"],
-        song_link: tuple["song_link"],
-        likes: tuple["post_likes"],
-        comments: tuple["post_comments"]
-      }
+        {
+          id: tuple["id"],
+          username: tuple["username"],
+          time_of_post: tuple["time_of"],
+          caption: tuple["caption"],
+          song_link: tuple["song_link"],
+          likes: tuple["post_likes"],
+        }
     end
   end
 

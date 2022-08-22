@@ -31,7 +31,7 @@
         <% end %>
       <% end %>
       <p id="caption">Caption: <%= post[:caption] %></p>
-      <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
+      <p id="counts">Likes: <%= post[:likes] %></p>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <% if liked?(session[:username], post[:id])%>  
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
@@ -42,7 +42,7 @@
           <button id="like_button">Like</button>
         </form>
       <% end %>
-      <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See the full discussion</a>
+      <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See discussion</a>
     </div>
   <% end %>
 </ol>

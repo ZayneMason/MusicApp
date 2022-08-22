@@ -15,10 +15,17 @@
     <% if session[:error] %>
       <p id="session_error"><%= session.delete(:error) %></p>
     <% end %>
-    <% if logged_in?() %>
+    <% if logged_in? == true %>
       <form action="/logout" method="post">
         <button id="logout_button">Logout</button>
       </form>
+      <div id="search">
+        <form action="/search" method="post">
+          <label for="search">Search username:
+            <input id="search" value="<%= params[:search] %>"/>
+          </label>
+        </form>
+      </div>
     <% end %>
     <%== yield %>
   </body>

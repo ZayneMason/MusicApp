@@ -6,7 +6,6 @@
   <% @posts.each do |post| %>
     <div id="post">
       <h3><a id="username_link" href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
-      <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
           <iframe id="embed"  height="90" width="320" src="<%= post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"

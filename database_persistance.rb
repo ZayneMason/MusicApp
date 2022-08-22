@@ -17,7 +17,7 @@ class DatabasePersistance
 
   def valid_user?(username, password)
     sql = "SELECT username FROM users WHERE username = $1 AND pass = crypt($2, pass)"
-    result = query(sql, username, password)
+    result = @db.exec_params(sql, [username, password])
     !result.values.empty? && username == result.values[0][0]
   end
 

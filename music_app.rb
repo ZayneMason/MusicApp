@@ -15,6 +15,10 @@ configure(:development) do
   also_reload "database_persistance.rb"
 end
 
+before do
+  @storage = DatabasePersistance.new(logger)
+end
+
 helpers do
   def following?(user_to_follow, username)
     @storage.new_follow?(user_to_follow, username) == false
@@ -29,9 +33,6 @@ helpers do
   end
 end
 
-before do
-  @storage = DatabasePersistance.new(logger)
-end
 
 def valid_login?(username, password)
   @storage.valid_user?(username, password)
@@ -43,6 +44,7 @@ def valid_link?(link)
   link.include?("https://open.spotify.com/track") ||
   link.include?("https://open.spotify.com/playlist/")
 end
+
 # LOG IN TO USER
 get "/users/login" do
   erb :login, layout: :layout
@@ -59,6 +61,7 @@ post "/users/login" do
   end
 end
 
+# LOG OUT OF USER
 post "/logout" do
   session.delete(:username)
   redirect "/users/login"
@@ -81,7 +84,7 @@ post "/users/create" do
   redirect "/"
 end
 
-# DISPLAY A LIST OF POSTS FROM USERS USER FOLLOWS
+# DISPLAY A LIST OF POSTS 
 get "/" do
   redirect "/users/login" unless session[:username]
   @session = session
@@ -95,12 +98,12 @@ get "/browse" do
   erb :top_posts_of_week, layout: :layout
 end
 
+# CREATE A NEW POST
 get "/users/posts/new" do
   redirect "/users/login" unless session[:username]
   erb :create_post, layout: :layout
 end
 
-# CREATE A NEW POST
 post "/users/posts/new" do
   redirect "/users/login" unless session[:username]
 
@@ -140,6 +143,7 @@ post "/posts/:post_id/comments" do
   redirect back
 end
 
+# LIKE A POST
 post "/posts/:post_id/likes" do
   redirect "/users/login" unless session[:username]
   if @storage.new_like?(session[:username], params[:post_id])
@@ -158,6 +162,7 @@ get "/users/:username" do
   erb :user, layout: :layout
 end
 
+# FOLLOW A USER
 post "/users/:username/follow" do
   redirect "/users/login" unless session[:username]
   user_to_follow = params[:username]
@@ -167,6 +172,14 @@ post "/users/:username/follow" do
     @storage.delete_follow(user_to_follow, session[:username])
   end
   redirect back
+end
+
+# CREATING FEATURE TO SEARCH FOR USERS BASED ON USERNAME
+post "/search" do
+  @search_results = @storage.search_users(params[:search])
+end
+
+get "/search_results"  do
 end
 
 after do

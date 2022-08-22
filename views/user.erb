@@ -14,7 +14,6 @@
 <h2 id="posts_banner">Posts:</h2>
 <% @user_posts.each do |post| %>
  <div id="post">
-      <p id="time_of_post">Posted at: <%= post[:time_of_post] %></p>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
           <iframe class="embed"  height="90" width="320" src="<%= post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"

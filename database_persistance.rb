@@ -37,7 +37,8 @@ class DatabasePersistance
   def get_posts_for_list(username)
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.username) AS post_likes FROM posts
+    posts.song_link, count(DISTINCT likes.username) AS post_likes, count(DISTINCT comments.comment) AS post_comments FROM posts
+    LEFT OUTER JOIN comments ON comments.post_id = posts.id
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
     INNER JOIN follows ON follows.follower = $1
     WHERE follows.username = posts.username
@@ -55,6 +56,7 @@ class DatabasePersistance
           caption: tuple["caption"],
           song_link: tuple["song_link"],
           likes: tuple["post_likes"],
+          comments: tuple["post_comments"]
 
         }
     end
@@ -63,7 +65,8 @@ class DatabasePersistance
   def get_top_posts
     sql = <<~SQL
     SELECT posts.id, posts.username, posts.time_of, posts.caption, 
-    posts.song_link, count(likes.username) AS post_likes FROM posts
+    posts.song_link, count( DISTINCT likes.username) AS post_likes, count(DISTINCT comments.comment) AS post_comments FROM posts
+    LEFT OUTER JOIN comments ON comments.post_id = posts.id
     LEFT OUTER JOIN likes ON likes.post_id = posts.id
     WHERE posts.time_of > current_date - interval '7 days'
     GROUP BY posts.id
@@ -81,6 +84,7 @@ class DatabasePersistance
           caption: tuple["caption"],
           song_link: tuple["song_link"],
           likes: tuple["post_likes"],
+          comments: tuple["post_comments"]
         }
     end
   end

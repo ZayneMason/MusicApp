@@ -1,5 +1,5 @@
 <% if @user_stats[:username] == session[:username] %>
-    <form action="employee.action" method="post">
+    <form action="/logout" method="post">
       <input type="submit" value="Logout" />
     </form>
 <% end %>

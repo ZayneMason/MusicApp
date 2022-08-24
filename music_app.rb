@@ -50,7 +50,7 @@ post "/users/login" do
   if @storage.valid_user?(params[:username], params[:password])
     session[:message] = "You are now logged in as #{params[:username]}"
     session[:username] = params[:username]
-    redirect "/"
+    redirect session[:current_path]
   else
     session[:error] = "Invalid username/password. Please try again."
     redirect "/users/login"
@@ -159,6 +159,7 @@ end
 
 # VIEW A SPECIFIC USER'S PROFILE
 get "/users/:username" do
+  session[:current_path] = request.path_info
   @user_posts = @storage.get_user_posts(params[:username])
   @user_stats = @storage.get_user_stats(params[:username])
   erb :user, layout: :layout

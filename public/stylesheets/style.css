@@ -1,7 +1,13 @@
-html * {
-  font-family: Arial !important;
+html {
+  font-family: monospace !important;
   color: rgb(226, 226, 226);
   padding-left: 10px;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 #username_link {
@@ -22,6 +28,7 @@ body {
   background-size:cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  overflow: overlay;
 }
 
 #container{
@@ -30,58 +37,67 @@ body {
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(354px,1fr));
 }
-#post_wrapper{
+
+.post_wrapper{
   background-image: url(https://i.gifer.com/POtJ.gif);
   background-position: center;
+  margin: 0;
   display: grid;
   grid-template-rows: 1fr auto;
   border-radius: 8px;
   margin: 5px;
   padding: .1rem;
-  width: 356px;
-  position: relative;
   break-inside: avoid;
 }
 
-#post {
+.post {
   background-color: #080808;
   padding: .5rem;
   border-radius: 6px;
+  text-align: left;
 }
 
-#post *{
+.post *{
   background-color: transparent;
 }
 
-#post a{
+.post a{
   display: inline-block;
   margin-bottom: 1px;
   padding: 2px;
 }
 
-#post button {
+.post button {
   border-radius: 8px;
   background-color: cyan;
   color: black;
   border-style: hidden;
 }
 
-#post button:hover {
+.post button:hover {
   background-color: rgb(248, 89, 187);
 }
 
-#caption{
+.caption{
   word-break: break-all;
   white-space: pre-wrap;
 }
+
+.embed{
+  border: 0px;
+}
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .topnav {
   overflow: hidden;
   background-color: transparent;
+}
+
+.topnav *{
+  display: inline-block;
+  margin: auto;
 }
 
 .topnav a {
@@ -103,11 +119,12 @@ body {
 }
 
 .topnav input[type=text] {
-  padding: 6px;
-  margin-top: 8px;
+  margin-top: 2px;
+  padding: 14px 16px;
   font-size: 24px;
   border: 0;
   background-color: transparent;
+  color: white;
 }
 
 .topnav input:focus{
@@ -116,11 +133,10 @@ body {
 
 .topnav .search-container button {
   float: right;
-  padding: 6px 10px;
-  margin-top: 8px;
+  padding: 14px 16px;
   margin-right: 16px;
   background: #ddd;
-  font-size: 17px;
+  font-size: 24px;
   border: none;
   cursor: pointer;
 }
@@ -154,4 +170,29 @@ a {
 a:hover {
   text-decoration: solid;
   color: white;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+  margin-right: 2px;
+  max-height: 10px;
+  background: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hotpink;
+  border-radius: 20px;
+  max-height: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: purple;
 }

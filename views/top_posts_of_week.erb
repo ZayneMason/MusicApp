@@ -1,49 +1,49 @@
 <h1>Your feed</h1>
 <a id="new_post_link" href="/users/posts/new">Create a new post!</a>
-<a class="feed_swap" href="/">Posts from people you follow</a>
+<a id="feed_swap" href="/">Posts from people you follow</a>
 <div id="container">
   <% @posts.each do |post| %>
-  <div id="post_wrapper">
-    <div id="post">
-      <h3><a id="username_link" href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
+  <div class="post_wrapper">
+    <div class="post">
+      <h2><a class="username_link" href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
           <iframe class="embed"  height="90" width="320" src="<%= post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
-          title="Spotify player" frameborder="0"
+          title="Spotify player" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         <% else %>
           <iframe class="embed"  height="90" width="320" src="<%= post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
-          title="Spotify player" frameborder="0"
+          title="Spotify player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         <% end %>
       <% elsif post[:song_link].include?("youtube.com") %>
         <% if post[:song_link].include?("playlist") %>
           <iframe class="embed" height="180" width="320" src="<%= post[:song_link].gsub("playlist?", "embed/videoseries?") %>"
-           title="YouTube video player" frameborder="0"
+           title="YouTube video player" 
            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
            allowfullscreen></iframe>
         <% else %>
           <iframe class="embed" height="180" width="320" src="<%= post[:song_link].gsub("watch?v=", "embed/") %>"
-           title="YouTube video player" frameborder="0"
+           title="YouTube video player" 
            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
            allowfullscreen></iframe>
         <% end %>
       <% end %>
-      <p id="caption"><%= post[:caption] %></p>
-      <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
-      <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
+      <p class="caption"><%= post[:caption] %></p>
+      <p class="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
+      <p class="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <% if liked?(session[:username], post[:id])%>  
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
-          <button id="like_button">Unlike</button>
+          <button class="like_button">Unlike</button>
         </form>
       <% else %>
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
-          <button id="like_button">Like</button>
+          <button class="like_button">Like</button>
         </form>
       <% end %>
-      <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See discussion</a>
+      <a class="comment_thread_link" href="/posts/<%= post[:id]%>">See discussion</a>
     </div>
   </div>
   <% end %>

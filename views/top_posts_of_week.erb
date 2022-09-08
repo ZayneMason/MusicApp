@@ -1,8 +1,9 @@
 <h1>Your feed</h1>
 <a id="new_post_link" href="/users/posts/new">Create a new post!</a>
 <a class="feed_swap" href="/">Posts from people you follow</a>
-<ol>
+<div id="container">
   <% @posts.each do |post| %>
+  <div id="post_wrapper">
     <div id="post">
       <h3><a id="username_link" href="/users/<%= post[:username] %>"><%= post[:username] %></a></h3>
       <% if post[:song_link].include?("spotify.com") %>
@@ -30,7 +31,7 @@
            allowfullscreen></iframe>
         <% end %>
       <% end %>
-      <p id="caption">Caption: <%= post[:caption] %></p>
+      <p id="caption"><%= post[:caption] %></p>
       <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
       <p id="song_link"><a href="<%= post[:song_link] %>">Listen here</a><p>
       <% if liked?(session[:username], post[:id])%>  
@@ -44,5 +45,6 @@
       <% end %>
       <a id="comment_thread_link" href="/posts/<%= post[:id]%>">See discussion</a>
     </div>
+  </div>
   <% end %>
-</ol>
+</div>

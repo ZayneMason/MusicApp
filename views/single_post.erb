@@ -1,5 +1,6 @@
+<div id="post_wrapper">
 <div id="post">
-  <h3>Posted by: <a href="/users/<%= @post[:username] %>"><%=@post[:username]%></a></h3>
+  <h3><a href="/users/<%= @post[:username] %>"><%=@post[:username]%></a></h3>
   <% if @post[:song_link].include?("spotify.com") %>
     <% if @post[:song_link].include?("playlist")%>
       <iframe id="embed"  height="90" width="320" src="<%= @post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
@@ -37,6 +38,7 @@
       <button id="like_button">Like</button>
     </form>
   <% end %>
+</div>
 </div>
 
 <h3>Comments:</h3>

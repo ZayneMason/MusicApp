@@ -108,6 +108,9 @@ post "/users/posts/new" do
     session[:error] = "Please make sure that the link provided is a valid Spotify or Youtube link."
     redirect "/users/posts/new"
   end
+  until params[:caption].length == 140 do
+    params[:caption] << " "
+  end
 
   @storage.create_post(params[:song_link], params[:caption], session[:username])
   session[:message] = "Post created!"

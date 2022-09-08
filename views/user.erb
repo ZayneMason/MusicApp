@@ -16,8 +16,9 @@
   </form>
 <% end %>
 <h3 id="big_counts">Posts: <%= @user_stats[:post_count] %></h3>
-<h2 id="posts_banner">Posts:</h2>
+<div id="container">
 <% @user_posts.each do |post| %>
+<div id="post_wrapper">
  <div id="post">
       <% if post[:song_link].include?("spotify.com") %>
         <% if post[:song_link].include?("playlist")%>
@@ -44,7 +45,7 @@
            allowfullscreen></iframe>
         <% end %>
       <% end %>
-      <p id="caption">Caption: <%= post[:caption] %></p>
+      <p id="caption"><%= post[:caption] %></p>
       <p id="counts">Likes: <%= post[:likes] %> Comments: <%= post[:comments] %></p>
       <% if liked?(session[:username], post[:id])%>  
         <form action = "/posts/<%= post[:id]%>/likes" method = "post">
@@ -63,5 +64,7 @@
         </form>
       <% end %>
   </div>
+  </div>
 <% end %>
+</div>
   

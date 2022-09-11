@@ -29,9 +29,9 @@ class DatabasePersistance
 
   def create_user(username, password)
     sql = "INSERT INTO users(username, pass) VALUES ($1, crypt($2, gen_salt('bf')))"
-    query(sql, username, password)
+    @db.exec_params(sql, [username, password])
     sql = "INSERT INTO follows(username, follower) VALUES ($1, $2)"
-    query(sql, username, username)
+    @db.exec_params(sql, [username, username])
   end
 
   def get_posts_for_list(username)

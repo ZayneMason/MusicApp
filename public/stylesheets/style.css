@@ -48,6 +48,7 @@ body {
   margin: 5px;
   padding: .1rem;
   break-inside: avoid;
+  width: auto;
 }
 
 .post {

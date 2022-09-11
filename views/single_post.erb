@@ -1,14 +1,14 @@
-<div class="post_wrapper">
-  <div class="post">
+<div class="post_wrapper_big">
+  <div class="post_big">
     <h3><a href="/users/<%= @post[:username] %>"><%=@post[:username]%></a></h3>
     <% if @post[:song_link].include?("spotify.com") %>
       <% if @post[:song_link].include?("playlist")%>
-        <iframe id="embed"  height="90" width="320" src="<%= @post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
+        <iframe id="embed" src="<%= @post[:song_link].gsub("playlist", "embed/playlist") + "?utm_source=generator" %>"
         title="Spotify player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
       <% else %>
-        <iframe id="embed"  height="90" width="320" src="<%= @post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
+        <iframe id="embed" src="<%= @post[:song_link].gsub("track", "embed/track") + "?utm_source=generator" %>"
         title="Spotify player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
@@ -26,7 +26,7 @@
           allowfullscreen></iframe>
       <% end %>
     <% end %>
-    <p id="caption">Caption: <%= @post[:caption] %></p>
+    <p id="caption"><%= @post[:caption] %></p>
     <p id="counts">Likes: <%= @post[:likes] %> Comments: <%= @post[:comments].count %></p>
     <p id="song_link"><a href="<%= @post[:song_link] %>">Listen here</a><p>
     <% if liked?(session[:username], @post[:id])%>  
@@ -41,17 +41,20 @@
   </div>
 </div>
 
-<h3>Comments:</h3>
-<form method="post" action="/posts/<%= @post[:id]%>/comments">
-<div>
-  <textarea name="new_comment" id="new_comment" rows="3" cols="28"></textarea>
-</div>
-<button type="submit">Add comment</button>
-</form>
-<% @post[:comments].each do |comment| %>
-  <div id="comment">
-    <b id="comment_username"><%= comment[:comment_username]%></b>
-    <p id="comment_comment"><%= comment[:comment_comment] %></p>
-    <p id="comment_time"><%= comment[:comment_time] %></p>
+
+<div class="comments">
+  <h3>Comments:</h3>
+  <form method="post" action="/posts/<%= @post[:id]%>/comments">
+  <div>
+    <textarea name="new_comment" id="new_comment" rows="3" cols="28"></textarea>
   </div>
-<% end %>
+  <button type="submit">Add comment</button>
+  </form>
+  <% @post[:comments].each do |comment| %>
+    <div class="comment">
+      <a class="username_link" href="/users/<%= comment[:comment_username] %>"><%= comment[:comment_username]%></a>
+      <p id="comment_comment"><%= comment[:comment_comment] %></p>
+      <p id="comment_time"><%= comment[:comment_time] %></p>
+    </div>
+  <% end %>
+</div>

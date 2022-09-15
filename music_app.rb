@@ -38,7 +38,8 @@ def valid_link?(link)
   link.include?("https://www.youtube.com/watch?") ||
   link.include?("https://youtube.com/playlist?") ||
   link.include?("https://open.spotify.com/track") ||
-  link.include?("https://open.spotify.com/playlist/")
+  link.include?("https://open.spotify.com/playlist/") ||
+  link.include?("https://open.spotify.com/album/")
 end
 
 # LOG IN TO USER
@@ -90,6 +91,11 @@ end
 get "/browse" do
   @posts = @storage.get_top_posts
   erb :top_posts_of_week, layout: :layout
+end
+
+get "/discover" do
+  @posts = @storage.get_posts_recent
+  erb :discover, layout: :layout
 end
 
 # CREATE A NEW POST

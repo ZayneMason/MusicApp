@@ -1,6 +1,9 @@
 <h1>Your feed</h1>
-<a id="new_post_link" href="/users/posts/new">Create a new post!</a>
-<a id="feed_swap" href="/">Posts from people you follow</a>
+<ul id="feed_links">
+  <li><a class="link" href="/users/posts/new">Create a new post!</a></li>
+  <li><a class="link" href="/">Posts from people you follow</a></li>
+  <li><a class="link" href="/discover">Discover recent posts</a></li>
+</ul>
 <div id="container">
   <% @posts.each do |post| %>
   <div class="post_wrapper">

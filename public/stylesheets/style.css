@@ -10,6 +10,21 @@ html {
   box-sizing: inherit;
 }
 
+#feed_links {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 2%;
+}
+
+#feed_links li {
+  background-color: #080808;
+  padding-left: 1%;
+  border-radius: .2rem;
+  margin-top: 10px;
+  width: 25%;
+}
+
+
 #username_link {
   color: rgb(156, 46, 247);
 }
@@ -258,3 +273,4 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: purple;
 }
+

@@ -128,7 +128,7 @@ post "/posts/:post_id/delete" do
   redirect back unless @storage.post_belong_to_user?(session[:username], params[:post_id])
   @storage.delete_post(params[:post_id])
   session[:message] = "Post has been removed."
-  redirect "/"
+  redirect "/" 
 end
 
 
@@ -166,7 +166,7 @@ post "/posts/:post_id/likes" do
   redirect back
 end
 
-# VIEW A SPECIFIC USER'S PROFILE
+# VIEW A SPECIFIC USER'S PROFILE 
 get "/users/:username" do
   session[:current_path] = request.path_info
   @user_posts = @storage.get_user_posts(params[:username])
